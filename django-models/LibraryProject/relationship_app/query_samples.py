@@ -10,4 +10,5 @@ author = author_name
 objects = Book.all()
 Author.objects.get(name=author_name).objects.filter(author=author)
 
-
+library = Library.objects.get(name="City")
+Librarian.objects.get(library=library)
