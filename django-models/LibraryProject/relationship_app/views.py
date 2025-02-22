@@ -19,11 +19,11 @@ def list_books(request):
     for book in books:
         print(f"Title: {book.title}, Author: {book.author.name}")
 
-    return render(request, "relationship_app/templates/ist_books.html", context)
+    return render(request, "relationship_app/list_books.html", context)
 
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = 'relationship_app/templates/library_detail.html'
+    template_name = 'relationship_app/library_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -32,7 +32,7 @@ class LibraryDetailView(DetailView):
     
 class BookListView(ListView):
     model = Book
-    template_name = 'relationship_app/templates/book_list.html'
+    template_name = 'relationship_app/book_list.html'
     context_object_name = 'books'
     
     def get_queryset(self):
