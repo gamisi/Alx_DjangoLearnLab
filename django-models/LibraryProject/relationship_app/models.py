@@ -35,7 +35,7 @@ class Book(models.Model):
 class Library(models.Model):
     name = models.CharField(max_length=200)
     books = models.ManyToManyField(Book, related_name="libraries")  
-
+    
     def __str__(self):
         return self.name if self.name else 'Unnamed Library' 
 
