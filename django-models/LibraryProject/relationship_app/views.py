@@ -11,8 +11,8 @@ def index(request):
 def book_list(request):
     books = Book.objects.all()
     context = {'book_list': books}
-    
+
     for book in books:
         print(f"Title: {book.title}, Author: {book.author.name}")
 
-    return render(request, 'list_books.html', context)
+    return render(request, "relationship_app/list_books.html", context)
