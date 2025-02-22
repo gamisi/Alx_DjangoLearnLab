@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Book, Librarian,Author
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 from .models import Library
 
 
@@ -29,3 +30,12 @@ class LibraryDetailView(DetailView):
         context['books'] = self.object.books.all()
         return context
     
+class BookListView(ListView):
+    model = Book
+    template_name = 'relationship_app/book_list.html'
+    context_object_name = 'books'
+    
+    def get_queryset(self):
+        # You can customize the queryset to filter books by library if needed
+        library_id = self.kwargs.get('library_id')
+        return Book.objects.filter(libraries__id=library_id)
