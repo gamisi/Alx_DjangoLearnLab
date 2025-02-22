@@ -7,6 +7,6 @@ Library.objects.get(name=library_name).books.all()
 
 author_name = Author.objects.get(name="Ngugi wa thiong'oo")
 author = author_name
-Author.objects.get(name=author_name).books.filter(author = author_name)
+Author.objects.get(name=author_name).Book.objects.filter(author = author_name)
 
 
