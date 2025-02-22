@@ -11,7 +11,7 @@ from .models import Library
 def index(request): 
     return HttpResponse("Welcome to my website.")
 
-def book_list(request):
+def list_books(request):
     books = Book.objects.all()
     context = {'book_list': books}
 

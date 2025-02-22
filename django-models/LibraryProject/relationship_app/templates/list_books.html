@@ -4,15 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <title>List of Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .no-books {
+            color: #ff0000;
+        }
+    </style>
 </head>
 <body>
     <h1>All Books:</h1>
-    <ul>
-        {% for book in book_list %}
-            <li>{{ book.title }} by {{ book.author.name }}</li>
-        {% empty %}
-            <li>No books available.</li>
-        {% endfor %}
-    </ul>
+
+    {% if book_list %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in book_list %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-books">No books available.</p>
+    {% endif %}
 </body>
 </html>
