@@ -6,8 +6,9 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from .models import Library
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView, LogoutView
+#from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def index(request): 
@@ -33,7 +34,7 @@ class CustomLogoutView(LogoutView):
     next_page = 'home'  # Redirect to home after logout
 """
 
-
+@login_required
 def list_books(request):
     books = Book.objects.all()
     context = {'book_list': books}
