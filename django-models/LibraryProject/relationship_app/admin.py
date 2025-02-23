@@ -50,6 +50,15 @@ class AuthorAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 class BookAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return request.user.has_perm('relationship_app.can_add_book')
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.has_perm('relationship_app.can_change_book')
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.has_perm('relationship_app.can_delete_book')
+    
     list_display = ("title","author")
     search_fields =("title","author")
 
