@@ -1,23 +1,38 @@
 import logging
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Book, Librarian,Author
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from .models import Library
 from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
 # Create your views here.
 
 def index(request): 
     return HttpResponse("Welcome to my website.")
 
-class SignUpView(CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy("login")
-    template_name = "register.html"
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Automatically log the user in after registration
+            return redirect('login')  # Redirect to the homepage after successful registration
+    else:
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
+"""
+# Define login and logout views using Django's built-in views
+class CustomLoginView(LoginView):
+    template_name = 'relationship_app/login.html'
+
+class CustomLogoutView(LogoutView):
+    next_page = 'home'  # Redirect to home after logout
+"""
+
 
 def list_books(request):
     books = Book.objects.all()
