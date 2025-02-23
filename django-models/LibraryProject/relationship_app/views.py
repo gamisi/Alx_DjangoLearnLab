@@ -8,11 +8,37 @@ from .models import Library
 from django.contrib.auth.forms import UserCreationForm
 #from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
-# Create your views here.
+from django.contrib.auth.decorators import login_required, user_passes_test
 
+# Create your views here.
 def index(request): 
     return HttpResponse("Welcome to my website.")
+
+# Role check functions
+def is_admin(user):
+    return user.profile.role == 'Admin'
+
+def is_librarian(user):
+    return user.profile.role == 'Librarian'
+
+def is_member(user):
+    return user.profile.role == 'Member'
+
+@user_passes_test(is_admin)
+def admin_view(request):
+    if not hasattr(request.user, 'profile'):
+        return render(request, 'relationship_app/error.html', {'message': 'No profile found.'})
+    return render(request, 'relationship_app/admin_view.html')
+
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+@user_passes_test(is_member)
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -62,4 +88,6 @@ class BookListView(ListView):
         # You can customize the queryset to filter books by library if needed
         library_id = self.kwargs.get('library_id')
         return Book.objects.filter(libraries__id=library_id)
+
+
 
