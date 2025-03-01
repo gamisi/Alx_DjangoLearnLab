@@ -11,7 +11,7 @@ class Book(models.Model):
         return f"{self.title} by {self.author} in {self.published_year}"
 
     
-class User(AbstractBaseUser):
+class CustomUser(AbstractBaseUser):
     date_of_birth = date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
 
