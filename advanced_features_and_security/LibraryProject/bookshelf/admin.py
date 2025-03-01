@@ -14,5 +14,5 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_filter = ('username',)
 
 admin.site.register(Book, BookAdmin)
-admin.site.register(CustomUser)
+admin.site.register(CustomUser, CustomUserAdmin)
 #admin.site.register(CustomUserManager)
