@@ -37,7 +37,7 @@
 </head>
 <body>
     <h1>All Books:</h1>
-
+    {% csrf_token %}
     {% if book_list %}
         <table>
             <thead>
