@@ -1,0 +1,58 @@
+<!-- library_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ library.name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .library-info {
+            background-color: #ffffff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #444;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .no-books {
+            color: #ff0000;
+        }
+        .book-item {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        .book-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="library-info">
+        <h1>{{ library.name }}</h1>
+        <h2>Books Available:</h2>
+        {% if books %}
+            <ul>
+                {% for book in books %}
+                    <li class="book-item">{{ book.title }} by {{ book.author.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-books">No books available in this library.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
