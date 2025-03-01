@@ -12,7 +12,10 @@ class Book(models.Model):
 
         permissions = [
 
-            ("can_view", "can_create", "can_edit", "can_delete")       
+            ("can_view", "can view book"),       
+            ("can_create", "can create book"),
+            ("can_edit", "can edit book"),
+            ("can_delete", "can delete book"),
         ]
 
     def __str__(self):

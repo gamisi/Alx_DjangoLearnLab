@@ -76,7 +76,7 @@ class LibraryAdmin(admin.ModelAdmin):
 # Register your models here.
 
 # Unregister the default User model and register the custom one
-admin.site.unregister(User)
+#admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
 # Register UserProfile in the admin interface

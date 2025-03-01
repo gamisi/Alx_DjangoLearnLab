@@ -9,8 +9,10 @@ class UserProfile(models.Model):
         ('Librarian', 'Librarian'),
         ('Member', 'Member'),
     ]
+
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='Member')
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile')
+    
     def __str__(self):
         return self.role
         
