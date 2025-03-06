@@ -56,11 +56,13 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     
     'DEFAULT_AUTHENTICATION_CLASSES': [
-
         'rest_framework.authentication.TokenAuthentication',  # Use DRF's Token Authentication
-        
     ],
 
+    'DEFAULT_PERMISSION_CLASSES': [
+        
+        'rest_framework.permissions.IsAuthenticated',  # Require authentication for all views
+    ],
 }
 
 ROOT_URLCONF = 'api_project.urls'
