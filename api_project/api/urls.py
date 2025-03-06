@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import BookViewSet
 
 # Create a router and register your viewset
-router = DefaultRouter()
+router = DefaultRouter() #define router
 router.register(r'books_all', BookViewSet, basename='book_all')
 
 urlpatterns = [
