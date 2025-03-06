@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'api.apps.ApiConfig',
 ]
 
@@ -51,6 +52,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+
+        'rest_framework.authentication.TokenAuthentication',  # Use DRF's Token Authentication
+        
+    ],
+
+}
 
 ROOT_URLCONF = 'api_project.urls'
 
