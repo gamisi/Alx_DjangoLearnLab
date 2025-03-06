@@ -3,7 +3,7 @@ from .views import BookList
 
 urlpatterns = [
 
+    #path('',  include('api.urls')),
     path('books/', BookList.as_view(), name='book-list'),  
-    path('',  include('api.urls')),
 
 ]
