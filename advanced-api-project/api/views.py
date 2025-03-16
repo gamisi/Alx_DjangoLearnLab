@@ -12,10 +12,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['title', 'publication_year']
-    #filter_backends = [filters.SearchFilter]
-    #search_fields = ['title', 'publication_year']
+    '''filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['title', 'publication_year']'''
+    filter_backends = [filters.OrderingFilter]
+    filters_fields = ['title', 'publication_year']
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 # retrieve a specific book based on the id
