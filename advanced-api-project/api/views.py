@@ -17,7 +17,7 @@ class BookListView(generics.ListAPIView):
     filter_backends = [filters.OrderingFilter]
     filters_fields = ['title', 'publication_year']
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title','publication_year']
+    search_fields = ['title','publication_year','author']
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 # retrieve a specific book based on the id
