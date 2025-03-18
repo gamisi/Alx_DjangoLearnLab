@@ -6,7 +6,7 @@ from .forms import UserRegisterForm
 from .models import Post
 from django.http import HttpResponse
 from .forms import PostForm #post form
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 
 def register(request):
@@ -55,7 +55,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     # Redirect to the list of posts after creating a post
     success_url = reverse_lazy('post_list')
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin ,UpdateView):
     model = Post
     template_name = 'blog/post_form.html'
     fields = ['title', 'content']
@@ -63,6 +63,11 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     # Ensure the user can only edit their own posts
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
+    
+    # Ensure only the post author can edit
+    def test_func(self):
+        post = self.get_object()
+        return post.author == self.request.user
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.pk})
@@ -74,6 +79,10 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     # Ensure the user can only delete their own posts
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
+    
+    def test_func(self):
+        post = self.get_object()  # Get the post being deleted
+        return post.author == self.request.user  # Only allow the author to delete the post
 
     def get_success_url(self):
         return reverse_lazy('post_list')
