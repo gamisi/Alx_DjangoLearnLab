@@ -5,7 +5,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm
 from .models import Post
 from django.http import HttpResponse
-from .forms import PostForm
+from .forms import PostForm #post form
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
