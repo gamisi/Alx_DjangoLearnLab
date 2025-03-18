@@ -19,3 +19,11 @@ def register(request):
 def profile(request):
     return render(request, 'blog/profile.html')
 
+def home(request):
+    return render(request, 'blog/home.html')
+
+@login_required
+def posts(request):
+    return render(request, 'blog/home.html')
+
+
