@@ -41,15 +41,15 @@ class BookAPITestCase(APITestCase):
         data = {
             'title': 'New Book',
             'publication_year': 2023,
-            'author': self.author1.id  # Use author's ID for ForeignKey
+            'author': self.author1.id 
         }
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Book.objects.count(), 3)  # Ensure a new book was added
+        self.assertEqual(Book.objects.count(), 3)  
 
-    # Test Retrieve a Single Book (GET /books/{id}/)
+    # Test Retrieve to Single Book (GET /books/{id}/)
     def test_retrieve_book(self):
-        url = reverse('book_detail', kwargs={'pk': self.book1.id})  # Ensure this is correct
+        url = reverse('book_detail', kwargs={'pk': self.book1.id})  
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], self.book1.title)
@@ -72,7 +72,7 @@ class BookAPITestCase(APITestCase):
         url = reverse('book_detail', kwargs={'pk': self.book1.id})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Book.objects.count(), 1)  # Only one book should remain
+        self.assertEqual(Book.objects.count(), 1)  
 
     # Test Filtering Books by Author Name (GET /books/?search=author_name)
     def test_filter_books_by_author(self):
@@ -86,4 +86,4 @@ class BookAPITestCase(APITestCase):
         url = self.url + "?ordering=publication_year"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['publication_year'], 2020)  # Ensure the first book has the earliest year
+        self.assertEqual(response.data[0]['publication_year'], 2020) 
