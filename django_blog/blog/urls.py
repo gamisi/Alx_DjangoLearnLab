@@ -30,6 +30,6 @@ urlpatterns = [
     path('search/', views.search_posts, name='search_posts'),  # Search URL
     path('tags/<str:tag_name>/', views.PostListView.as_view(), name='posts_by_tag'),
     #path('posts/tag/<slug:tag>/', TaggedPostListView.as_view(), name='tagged_posts'),
-    path('posts/tag/<slug:tag_slug>/', PostByTagListView.as_view(), name='tagged_posts'),
+    path('tags/<slug:tag_slug>/', PostByTagListView.as_view(), name='tagged_posts'),
         
 ]
