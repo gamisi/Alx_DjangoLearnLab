@@ -3,9 +3,9 @@ from django.views.generic import ListView, DeleteView, CreateView, UpdateView, D
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserRegisterForm
-from .models import Post
+from .models import Post, Comment
 from django.http import HttpResponse
-from .forms import PostForm #post form
+from .forms import PostForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 
@@ -86,3 +86,57 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('post_list')
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    """ Allows authenticated users to post a comment """
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/add_comment.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user  # Assign the logged-in user
+        form.instance.post = get_object_or_404(Post, id=self.kwargs['post_id'])  # Associate with post
+        messages.success(self.request, "Comment added successfully!")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'post_id': self.kwargs['post_id']})
+
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """ Allows only the comment author to edit their comment """
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/edit_comment.html'
+
+    def test_func(self):
+        """ Restrict edit access to only the comment author """
+        comment = self.get_object()
+        return self.request.user == comment.user
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You are not allowed to edit this comment.")
+        return redirect('post_detail', post_id=self.get_object().post.id)
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'post_id': self.get_object().post.id})
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """ Allows only the comment author to delete their comment """
+    model = Comment
+    template_name = 'blog/confirm_delete_comment.html'
+
+    def test_func(self):
+        """ Restrict delete access to only the comment author """
+        comment = self.get_object()
+        return self.request.user == comment.user
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You are not allowed to delete this comment.")
+        return redirect('post_detail', post_id=self.get_object().post.id)
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'post_id': self.get_object().post.id})
+
+
