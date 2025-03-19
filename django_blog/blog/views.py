@@ -41,6 +41,12 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        """Pass the post's comments to the template"""
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(post=self.object) 
+        return context
     
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -86,21 +92,26 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('post_list')
-
-class CommentCreateView(LoginRequiredMixin, CreateView):
-    """ Allows authenticated users to post a comment """
+  
+class CommentCreateView(CreateView):
     model = Comment
     form_class = CommentForm
     template_name = 'blog/add_comment.html'
 
     def form_valid(self, form):
-        form.instance.user = self.request.user  # Assign the logged-in user
-        form.instance.post = get_object_or_404(Post, id=self.kwargs['post_id'])  # Associate with post
-        messages.success(self.request, "Comment added successfully!")
+        """ Associate the comment with the correct post """
+        form.instance.author = self.request.user
+        form.instance.post = get_object_or_404(Post, pk=self.kwargs['pk'])
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        """ Pass the `post` object to the template """
+        context = super().get_context_data(**kwargs)
+        context['post'] = get_object_or_404(Post, pk=self.kwargs['pk'])
+        return context
+
     def get_success_url(self):
-        return reverse_lazy('post_detail', kwargs={'post_id': self.kwargs['post_id']})
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['pk']})
 
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -112,14 +123,14 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         """ Restrict edit access to only the comment author """
         comment = self.get_object()
-        return self.request.user == comment.user
+        return self.request.user == comment.author
 
     def handle_no_permission(self):
         messages.error(self.request, "You are not allowed to edit this comment.")
         return redirect('post_detail', post_id=self.get_object().post.id)
 
     def get_success_url(self):
-        return reverse_lazy('post_detail', kwargs={'post_id': self.get_object().post.id})
+        return reverse_lazy('post_detail', kwargs={'pk': self.get_object().post.id})
 
 
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -130,13 +141,13 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         """ Restrict delete access to only the comment author """
         comment = self.get_object()
-        return self.request.user == comment.user
+        return self.request.user == comment.author
 
     def handle_no_permission(self):
         messages.error(self.request, "You are not allowed to delete this comment.")
         return redirect('post_detail', post_id=self.get_object().post.id)
 
     def get_success_url(self):
-        return reverse_lazy('post_detail', kwargs={'post_id': self.get_object().post.id})
+        return reverse_lazy('post_detail', kwargs={'pk': self.get_object().post.id})
 
 

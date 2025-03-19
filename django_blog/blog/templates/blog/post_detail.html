@@ -7,4 +7,33 @@
     <a href="{% url 'post_edit' post.pk %}">Edit</a> |
     <a href="{% url 'post_delete' post.pk %}">Delete</a>
 
+    <hr>
+    <h3>Comments</h3>
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <strong>{{ comment.author.username }}</strong>: {{ comment.content }} ({{ comment.created_at }})
+                
+                {% if request.user == comment.author %}  
+                    <a href="{% url 'edit_comment' comment.id %}">Edit</a> | 
+                    <a href="{% url 'delete_comment' comment.id %}">Delete</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No comments yet. Be the first to comment!</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+    <h3>Add a Comment</h3>
+    {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'add_comment' post.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Post Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
+    {% endif %}
+
 {% endblock %}
