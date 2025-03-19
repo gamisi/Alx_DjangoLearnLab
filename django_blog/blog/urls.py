@@ -3,7 +3,7 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 from .views import register, profile, home
 from .import views
-from .views import TaggedPostListView
+from .views import TaggedPostListView, PostByTagListView
 
 urlpatterns = [
     # Authentication URLs
@@ -17,8 +17,6 @@ urlpatterns = [
     path ('home/', home, name='home'),
     #path('posts/', posts, name='posts'),
 
-    path('posts/tag/<slug:tag>/', TaggedPostListView.as_view(), name='tagged_posts'),
-
     path('posts/', views.PostListView.as_view(), name='post_list'),
     path('post/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
     path('post/new/', views.PostCreateView.as_view(), name='post_create'),
@@ -31,5 +29,7 @@ urlpatterns = [
 
     path('search/', views.search_posts, name='search_posts'),  # Search URL
     path('tags/<str:tag_name>/', views.PostListView.as_view(), name='posts_by_tag'),
+    #path('posts/tag/<slug:tag>/', TaggedPostListView.as_view(), name='tagged_posts'),
+    path('posts/tag/<slug:tag_slug>/', PostByTagListView.as_view(), name='tagged_posts'),
         
 ]

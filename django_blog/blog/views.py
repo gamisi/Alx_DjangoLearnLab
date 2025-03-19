@@ -45,13 +45,13 @@ class PostListView(ListView):
             return Post.objects.filter(tags__name=tag_name)
         return Post.objects.all()
 
-class TaggedPostListView(ListView):
+class PostByTagListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
 
     def get_queryset(self):
-        return Post.objects.filter(tags__slug=self.kwargs['tag'])
+        return Post.objects.filter(tags__slug=self.kwargs['tag_slug'])
 
 class PostDetailView(DetailView):
     model = Post
