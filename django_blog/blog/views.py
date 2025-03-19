@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from .forms import PostForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
+from django.db.models import Q
+
 
 def register(request):
     if request.method == 'POST':
@@ -36,6 +38,12 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/posts.html'
     context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get('tag_name')
+        if tag_name:
+            return Post.objects.filter(tags__name=tag_name)
+        return Post.objects.all()
 
 class TaggedPostListView(ListView):
     model = Post
@@ -158,4 +166,16 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.get_object().post.id})
 
+def search_posts(request):
+    # Get search query from the request
+    query = request.GET.get('q')  
+    results = Post.objects.all()
 
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |  # Search in title
+            Q(content__icontains=query) |  # Search in content
+            Q(tags__name__icontains=query)  # Search in tags
+        ).distinct()
+
+    return render(request, 'blog/search_results.html', {'query': query, 'results': results})
