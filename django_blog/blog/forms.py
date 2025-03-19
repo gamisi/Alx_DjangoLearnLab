@@ -13,7 +13,7 @@ class UserRegisterForm(UserCreationForm):
 
 class PostForm(forms.ModelForm):
 
-    tags = forms.CharField(
+    tags = TagField(
         required=False,
         widget=TagWidget(),
         help_text="Separate tags with commas (e.g., 'django, web development, python')"
@@ -22,6 +22,17 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter post title',
+            }),
+            'content': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 5,
+                'placeholder': 'Write your content here...',
+            }),
+        }
     
     def __init__(self, *args, **kwargs):
         """ Prepopulate tags when editing a post """
