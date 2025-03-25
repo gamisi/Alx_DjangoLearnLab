@@ -10,12 +10,15 @@ from .models import CustomUser
 from rest_framework.permissions import AllowAny
 from .serializers import CustomUserSerializer, UserLoginSerializer, TokenSerializer
 
+class UserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
 class RegisterUserView(generics.CreateAPIView):
     
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     # permission_classes = [AllowAny]
-
 
     """def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
