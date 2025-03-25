@@ -11,13 +11,24 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['id', 'username', 'email', 'bio', 'profile_picture', 'followers']
         extra_kwargs = {'password': {'write_only': True}}
+    
 
-    def create(self, validated_data):
+    """def create(self, validated_data):
         user = get_user_model().objects.create_user(**validated_data)
         Token.objects.create(user=user)  # Create token when a new user is created
-        return user
+        return user"""
 
-class UserLoginSerializer(serializers.Serializer):
+    def create(self, validated_data):
+            # Extract followers data from validated_data
+            followers_data = validated_data.pop('followers', [])
+            # Create the user
+            user = get_user_model().objects.create_user(**validated_data)
+            if followers_data:
+                user.followers.set(followers_data)
+            Token.objects.create(user=user)
+            return user
+
+class UserLoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
