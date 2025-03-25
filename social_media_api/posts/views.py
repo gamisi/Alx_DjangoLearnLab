@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from serializers import PostSerializer, CommentSerializer
+from .serializers import PostSerializer, CommentSerializer
 from rest_framework import generics
 from .models import Post, Comment
 
