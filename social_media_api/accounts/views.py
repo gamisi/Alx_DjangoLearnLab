@@ -140,13 +140,12 @@ class UnfollowUserView(generics.GenericAPIView):
 class UserFeedView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    
     def get_queryset(self):
         user = self.request.user
 
         # Get posts from the users the current user is following
-        followed_users = user.following.all()
-        return Post.objects.filter(author__in=followed_users).order_by('-created_at')
+        following_users = user.following.all()
+        return Post.objects.filter(author__in=following_users).order_by('-created_at')
     
     def get(self, request):
         # Use the `get_queryset` method to get the filtered posts
