@@ -14,7 +14,9 @@ urlpatterns = [
     path('posts/', PostListCreateView.as_view(), name='post-list-create'),
     path('comments/', CommentListCreateView.as_view(), name='comment-list-create'),
     path('feed/', UserFeedView.as_view(), name='user_feed'),
-    path('like/<int:pk>/', views.LikePostView.as_view(), name='like_post'),
-    path('unlike/<int:pk>/', views.UnlikePostView.as_view(), name='unlike_post'),
+    # path('like/<int:pk>/', views.LikePostView.as_view(), name='like_post'),
+    # path('unlike/<int:pk>/', views.UnlikePostView.as_view(), name='unlike_post'),
+    path('<int:pk>/like/', views.LikePostView.as_view(), name='like_post'),
+    path('<int:pk>/unlike/', views.UnlikePostView.as_view(), name='unlike_post'),
 
 ]
