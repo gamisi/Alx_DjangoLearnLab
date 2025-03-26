@@ -103,7 +103,7 @@ def user_feed(request):
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)"""
 
-class FollowUserView(generics.GenericAPIView):
+class FollowUserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
@@ -120,7 +120,7 @@ class FollowUserView(generics.GenericAPIView):
         return Response({'detail': 'Followed successfully'}, status=status.HTTP_200_OK)
 
 
-class UnfollowUserView(generics.GenericAPIView):
+class UnfollowUserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
@@ -136,22 +136,4 @@ class UnfollowUserView(generics.GenericAPIView):
 
         return Response({'detail': 'Unfollowed successfully'}, status=status.HTTP_200_OK)
 
-
-class UserFeedView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-
-        # Get posts from the users the current user is following
-        following_users = user.following.all()
-        return Post.objects.filter(author__in=following_users).order_by('-created_at')
     
-    def get(self, request):
-        # Use the `get_queryset` method to get the filtered posts
-        posts = self.get_queryset()
-
-        # Serialize the posts
-        serializer = PostSerializer(posts, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
