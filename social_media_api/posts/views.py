@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
 from notifications.views import create_notification
 from rest_framework.views import APIView
+from notifications.models import Notification
 
 # Create your views here.
 
@@ -81,7 +82,9 @@ class LikePostView(APIView):
         like = Like.objects.get_or_create(user=request.user, post=post)
 
         # Generate a notification for the post author
-        create_notification(user, post.author, 'liked', post)
+        # create_notification(user, post.author, 'liked', post)\
+
+        Notification.objects.create(user, post.author, 'liked', post)
 
         return Response({'detail': 'Post liked successfully'}, status=status.HTTP_201_CREATED)
 
