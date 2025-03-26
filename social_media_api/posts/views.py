@@ -69,9 +69,9 @@ class UserFeedView(generics.GenericAPIView):
 class LikePostView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, post_id):
+    def post(self, request, pk):
         user = request.user
-        post = get_object_or_404(Post, id=post_id)
+        post = get_object_or_404(Post, id=pk)
 
         # Check if the user has already liked the post
         if Like.objects.filter(user=user, post=post).exists():
@@ -89,9 +89,9 @@ class LikePostView(APIView):
 class UnlikePostView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, post_id):
+    def post(self, request, pk):
         user = request.user
-        post = get_object_or_404(Post, id=post_id)
+        post = get_object_or_404(Post, id=pk)
 
         # Check if the user has liked the post
         like = Like.objects.filter(user=user, post=post).first()
