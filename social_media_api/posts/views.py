@@ -78,7 +78,7 @@ class LikePostView(APIView):
             return Response({'detail': 'You have already liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create a Like record
-        like = Like.objects.create(user=user, post=post)
+        like = Like.objects.create(user=request.user, post=post)
 
         # Generate a notification for the post author
         create_notification(user, post.author, 'liked', post)
