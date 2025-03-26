@@ -72,7 +72,7 @@ class LikePostView(APIView):
 
     def post(self, request, pk):
         user = request.user
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
 
         # Check if the user has already liked the post
         if Like.objects.filter(user=user, post=post).exists():
@@ -82,7 +82,7 @@ class LikePostView(APIView):
         like = Like.objects.get_or_create(user=request.user, post=post)
 
         # Generate a notification for the post author
-        # create_notification(user, post.author, 'liked', post)\
+        # create_notification(user, post.author, 'liked', post)
 
         Notification.objects.create(user, post.author, 'liked', post)
 
