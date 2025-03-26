@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts.apps.AccountsConfig',
     'posts.apps.PostsConfig',
+    'notifications.apps.NotificationsConfig',
     'rest_framework.authtoken',
 ]
 

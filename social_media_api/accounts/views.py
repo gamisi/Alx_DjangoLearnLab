@@ -12,6 +12,7 @@ from posts.models import Post
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import CustomUserSerializer, UserLoginSerializer, TokenSerializer
 from posts.serializers import PostSerializer
+from notifications .views import create_notification
 
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
@@ -120,6 +121,9 @@ class FollowUserView(generics.GenericAPIView):
         # Add the user to the following list and the target user to the followers list
         user.following.add(user_to_follow)
         user_to_follow.followers.add(user)
+        
+         # Generate a notification for the followed user
+        create_notification(user, user_to_follow, 'started following you', user)
 
         return Response({'detail': 'Followed successfully'}, status=status.HTTP_200_OK)
 
@@ -127,7 +131,7 @@ class FollowUserView(generics.GenericAPIView):
 class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = DummySerializer
-    
+
     def post(self, request, user_id):
         user = request.user
         user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
