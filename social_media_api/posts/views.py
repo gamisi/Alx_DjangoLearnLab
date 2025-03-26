@@ -71,7 +71,7 @@ class LikePostView(APIView):
 
     def post(self, request, pk):
         user = request.user
-        post = get_object_or_404(Post, id=pk)
+        post = get_object_or_404(Post, pk=pk)
 
         # Check if the user has already liked the post
         if Like.objects.filter(user=user, post=post).exists():
